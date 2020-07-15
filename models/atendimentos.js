@@ -2,6 +2,7 @@ const moment = require('moment');
 const conexao = require('../infraestrutura/conexao');
 const atendimentos = require('../controllers/atendimentos');
 class Atendimento {
+
   adiciona(atendimento, res) {
     const dataCriacao = moment().format('YYYY-MM-DD HH:MM:SS');
     const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS');
@@ -43,5 +44,28 @@ class Atendimento {
 
 
   }
+
+  lista(res) {
+    const sql = 'SELECT * FROM Atendimentos';
+    conexao.query(sql, (erro, resultados) => {
+      if (erro) {
+        res.status(400).json(erro);
+      } else {
+        res.status(200).json(resultados);
+      }
+    });
+  }
+
+  buscaPorId(id, res) {
+    const sql = `SELECT * FROM Atendimentos WHERE id = ${id}`;
+    conexao.query(sql, (erro, resultados) => {
+      if (erro) {
+        res.status(400).json(erro);
+      } else {
+        res.status(200).json(resultados);
+      }
+    });
+  }
+
 }
 module.exports = new Atendimento;
